@@ -2,7 +2,7 @@ from tkinter import *
 
 root = Tk()
 
-button = Button(
+button = Button(root,
     text="This is a button!",
     width=30,
     height=10,
