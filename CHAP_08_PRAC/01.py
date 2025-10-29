@@ -2,8 +2,8 @@ import tkinter as tk
 import random
 
 class MovingShapeApp:
-    def __init__(self):
-        self.root = tk.Tk()
+    def __init__(self, root):
+        self.root = root
         self.root.title("Moving Shape App")
 
         # 캔버스 생성
@@ -21,9 +21,6 @@ class MovingShapeApp:
 
         # 마우스 이벤트
         self.canvas.bind("<B1-Motion>", self.change_color)
-
-        # 루프 시작
-        self.root.mainloop()
 
     # 이동 매서드
     def move_shape(self, dx, dy):
@@ -47,5 +44,6 @@ class MovingShapeApp:
         color = random.choice(colors)
         self.canvas.itemconfig(self.shape, fill=color)  # 색상 변경
 
-app = MovingShapeApp()
+root=tk.Tk()
+app = MovingShapeApp(root)
 root.mainloop()
