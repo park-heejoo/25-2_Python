@@ -27,7 +27,7 @@ class MovingShapeApp:
 
     # 이동 매서드
     def move_shape(self, dx, dy):
-        self.canvas.move(Self.shape, dx, dy)
+        self.canvas.move(self.shape, dx, dy)
 
     def move_up(self, event):
         self.canvas.move(self.shape, 0, -10)  # y좌표 -10 (위로 이동)
