@@ -1,0 +1,136 @@
+from tkinter import *
+
+class Pet:
+    def __init__(self, name):
+        self.name = name
+
+    def speak(self):
+        return "..."
+
+class Dog(Pet):
+    def speak(self):
+        return "멍멍!"
+
+class Cat(Pet):
+    def speak(self):
+        return "야옹!"
+
+class Person:
+    def __init__(self, name, pet=None):
+        self.name = name
+        self.pet = pet
+
+
+# 초기 상태: 강아지 한 마리 등록되어 있다고 가정
+initial_pet = Dog("초기강아지")
+person = Person("홍길동", initial_pet)
+
+root = Tk()
+root.title("문제 5-3")
+root.geometry("700x320")
+
+title_label = Label(root, text="홍길동의 반려동물 정보를 수정하세요.", font=("맑은 고딕", 13, "bold"))
+title_label.pack(pady=10)
+
+frame_name = Frame(root)
+frame_name.pack(pady=5)
+
+Label(frame_name, text="새 이름(비우면 기존 유지): ").pack(side="left")
+entry_name = Entry(frame_name, width=20)
+entry_name.pack(side="left")
+
+# 종류 변경 (강아지 / 고양이)
+frame_kind = Frame(root)
+frame_kind.pack(pady=5)
+
+kind_var = IntVar()  # 1: 강아지, 2: 고양이
+Radiobutton(frame_kind, text="강아지", variable=kind_var, value=1).pack(side="left", padx=10)
+Radiobutton(frame_kind, text="고양이", variable=kind_var, value=2).pack(side="left", padx=10)
+
+# 옵션 (예방접종 / 중성화)
+frame_opt = Frame(root)
+frame_opt.pack(pady=5)
+
+vaccine_var = IntVar()
+neuter_var = IntVar()
+
+Checkbutton(frame_opt, text="예방접종 완료", variable=vaccine_var).pack(side="left", padx=10)
+Checkbutton(frame_opt, text="중성화 완료", variable=neuter_var).pack(side="left", padx=10)
+
+result_label = Label(root, text="", font=("맑은 고딕", 11), fg="blue", justify="left")
+result_label.pack(pady=15)
+
+# 초기 상태 정보 문자열 생성 함수
+def pet_info_text(pet, vac=0, neut=0):
+    if isinstance(pet, Dog):
+        kind_text = "강아지"
+        sound = pet.speak()
+    elif isinstance(pet, Cat):
+        kind_text = "고양이"
+        sound = pet.speak()
+    else:
+        kind_text = "반려동물"
+        sound = pet.speak()
+
+    vac_text = "O" if vac == 1 else "X"
+    neut_text = "O" if neut == 1 else "X"
+
+    msg = f"이름: {pet.name}, 종류: {kind_text}, 울음소리: {sound}, 예방접종: {vac_text}, 중성화: {neut_text}"
+    return msg
+
+# 초기 표시
+current_vac = 0
+current_neut = 0
+result_label.config(text="현재 등록된 반려동물 정보:\n" + pet_info_text(person.pet, current_vac, current_neut))
+
+def update_info():
+    global current_vac, current_neut
+
+    new_name = entry_name.get().strip()
+    if new_name == "":
+        new_name = person.pet.name  # 기존 이름 유지
+
+    kind = kind_var.get()
+    if kind == 1:
+        new_pet = Dog(new_name)
+        kind_text = "강아지"
+    elif kind == 2:
+        new_pet = Cat(new_name)
+        kind_text = "고양이"
+    else:
+        # 종류 안 골랐으면 기존 종류 유지
+        new_pet = type(person.pet)(new_name)
+        kind_text = "강아지" if isinstance(new_pet, Dog) else "고양이"
+
+    person.pet = new_pet
+
+    current_vac = vaccine_var.get()
+    current_neut = neuter_var.get()
+
+    sound = new_pet.speak()
+    vac_text = "O" if current_vac == 1 else "X"
+    neut_text = "O" if current_neut == 1 else "X"
+
+    msg = "현재 등록된 반려동물 정보:\n"
+    msg += f"이름: {new_name}, 종류: {kind_text}, 울음소리: {sound}, 예방접종: {vac_text}, 중성화: {neut_text}"
+    result_label.config(text=msg)
+
+def reset_initial():
+    global current_vac, current_neut
+    # 초기 상태로 되돌리기
+    person.pet = Dog("초기강아지")
+    entry_name.delete(0, END)
+    kind_var.set(0)
+    vaccine_var.set(0)
+    neuter_var.set(0)
+    current_vac = 0
+    current_neut = 0
+    result_label.config(text="현재 등록된 반려동물 정보:\n" + pet_info_text(person.pet, current_vac, current_neut))
+
+frame_btn = Frame(root)
+frame_btn.pack(pady=10)
+
+Button(frame_btn, text="정보 수정", command=update_info).pack(side="left", padx=10)
+Button(frame_btn, text="초기값으로 되돌리기", command=reset_initial).pack(side="left", padx=10)
+
+root.mainloop()
