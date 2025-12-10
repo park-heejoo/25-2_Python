@@ -40,8 +40,7 @@ label1.pack(pady=10)
 entry=Entry(root)
 entry.pack()
 
-result=StringVar(value='결과가 여기에 표시됩니다.')
-label2=Label(root, textvariable=result)
+label2=Label(root, text='결과가 여기에 표시됩니다.')
 label2.pack(pady=10)
 
 car=entry.get().strip()
@@ -55,7 +54,7 @@ def drive_car():
     c=Car(name)
     message=c.drive()
     append_log(message)
-    result.set(message)
+    label2.config(text=message)
 
 def drive_truck():
     name=entry.get().strip()
@@ -65,11 +64,11 @@ def drive_truck():
     t=Truck(name)
     message=t.drive()
     append_log(message)
-    result.set(message)
+    label2.config(text=message)
 
 def clear_log():
     clear_log_file()
-    result.set('로그 파일을 비웠습니다.')
+    label2.config(text='로그 파일을 비웠습니다.')
 
 b1=Button(root, text='자동차 주행', width=15, command=drive_car)
 b1.pack(pady=5)
@@ -79,5 +78,6 @@ b2.pack()
 
 b3=Button(text='로그 비우기', width=15, command=clear_log)
 b3.pack(pady=5)
+
 
 root.mainloop()
