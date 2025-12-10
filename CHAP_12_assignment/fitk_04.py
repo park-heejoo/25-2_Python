@@ -5,7 +5,7 @@ class Vehicle:
         self.name=name
 
     def drive(self):
-        print('NotImplementedError')
+        raise NotImplementedError
 
 class Car(Vehicle):
     def __init__(self, name):
@@ -43,9 +43,6 @@ entry.pack()
 label2=Label(root, text='결과가 여기에 표시됩니다.')
 label2.pack(pady=10)
 
-car=entry.get().strip()
-truck=entry.get().strip()
-
 def drive_car():
     name=entry.get().strip()
     if name=='':
@@ -70,10 +67,13 @@ def clear_log():
     clear_log_file()
     label2.config(text='로그 파일을 비웠습니다.')
 
-b1=Button(root, text='자동차 주행', width=15, command=drive_car)
+frame=Frame(root)
+frame.pack(pady=5)
+
+b1=Button(frame, text='자동차 주행', width=15, command=drive_car)
 b1.pack(pady=5)
 
-b2=Button(root, text='트럭 주행', width=15, command=drive_truck)
+b2=Button(frame, text='트럭 주행', width=15, command=drive_truck)
 b2.pack()
 
 b3=Button(text='로그 비우기', width=15, command=clear_log)
@@ -81,3 +81,4 @@ b3.pack(pady=5)
 
 
 root.mainloop()
+
